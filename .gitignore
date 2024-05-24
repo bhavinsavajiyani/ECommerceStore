@@ -481,3 +481,4 @@ $RECYCLE.BIN/
 *.db-wal
 
 .vscode/
+EComm_Store_API/appsettings.json

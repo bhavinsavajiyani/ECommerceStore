@@ -1,4 +1,4 @@
-using EComm_Store_API.Data;
+using EComm_Store_Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
