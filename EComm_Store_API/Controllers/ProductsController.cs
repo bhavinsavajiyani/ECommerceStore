@@ -17,7 +17,7 @@ namespace EComm_Store_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
         {
             return Ok(await _repository.GetProductsAsync());
         }
@@ -26,6 +26,18 @@ namespace EComm_Store_API.Controllers
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             return await _repository.GetProductByIDAsync(id);
+        }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+        {
+            return Ok(await _repository.GetProductBrandsAsync());
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
+        {
+            return Ok(await _repository.GetProductTypesAsync());
         }
     }
 }
