@@ -1,4 +1,5 @@
 using EComm_Store_Core.Entities;
+using EComm_Store_Core.Interfaces;
 using EComm_Store_Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,24 +10,22 @@ namespace EComm_Store_API.Controllers
     [Route("api/[controller]")] // api/products
     public class ProductsController : ControllerBase
     {
-        private readonly StoreContext _context;
-
-        public ProductsController(StoreContext context)
+        private readonly IProductRepository _repository;
+        public ProductsController(IProductRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            return Ok(await _repository.GetProductsAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            Product? product = await _context.Products.FindAsync(id);
-            return product != null ? product :  NotFound();
+            return await _repository.GetProductByIDAsync(id);
         }
     }
 }
