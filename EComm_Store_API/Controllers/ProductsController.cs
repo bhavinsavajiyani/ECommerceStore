@@ -1,5 +1,5 @@
-using EComm_Store_API.Data;
-using EComm_Store_API.Entities;
+using EComm_Store_Core.Entities;
+using EComm_Store_Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace EComm_Store_API.Data.Migrations
+namespace EComm_Store_Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
