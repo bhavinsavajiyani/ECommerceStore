@@ -1,3 +1,5 @@
+using AutoMapper;
+using EComm_Store_API.DTOs;
 using EComm_Store_Core.Entities;
 using EComm_Store_Core.Interfaces;
 using EComm_Store_Core.Specifications;
@@ -12,29 +14,35 @@ namespace EComm_Store_API.Controllers
         private readonly IGenericRepository<Product> _productsRepo;
         private readonly IGenericRepository<ProductBrand> _productBrandsRepo;
         private readonly IGenericRepository<ProductType> _productTypesRepo;
+        private readonly IMapper _mapper;
 
         public ProductsController(
                 IGenericRepository<Product> productsRepo,
                 IGenericRepository<ProductBrand> productBrandsRepo,
-                IGenericRepository<ProductType> productTypesRepo)
+                IGenericRepository<ProductType> productTypesRepo,
+                IMapper mapper)
         {
             _productsRepo = productsRepo;
             _productBrandsRepo = productBrandsRepo;
             _productTypesRepo = productTypesRepo;
+            _mapper = mapper;
         }
 
         [HttpGet] // URL: api/products
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductDTO>>> GetProducts()
         {
             var spec = new ProductsWithBrandsAndTypesSpecification();
-            return Ok(await _productsRepo.GetCollectionAsync(spec));
+            var products = await _productsRepo.GetCollectionAsync(spec);
+            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDTO>>(products));
         }
 
         [HttpGet("{id:int}")]  // URL: api/products/id => E.g.: api/products/1
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
             var spec = new ProductsWithBrandsAndTypesSpecification(id);
-            return await _productsRepo.GetEntityWithSpec(spec);
+            var product = await _productsRepo.GetEntityWithSpec(spec);
+
+            return _mapper.Map<Product, ProductDTO>(product);
         }
 
         [HttpGet("brands")] // URL: api/products/brands
