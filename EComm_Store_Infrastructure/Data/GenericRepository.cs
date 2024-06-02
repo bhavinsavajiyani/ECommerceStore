@@ -1,5 +1,6 @@
 using EComm_Store_Core.Entities;
 using EComm_Store_Core.Interfaces;
+using EComm_Store_Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace EComm_Store_Infrastructure.Data
@@ -20,6 +21,21 @@ namespace EComm_Store_Infrastructure.Data
         public async Task<IReadOnlyList<T>> GetCollectionAsync()
         {
             return await _context.Set<T>().ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<T>> GetCollectionAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).ToListAsync();
+        }
+
+        public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).FirstAsync();
+        }
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
     }
 }
