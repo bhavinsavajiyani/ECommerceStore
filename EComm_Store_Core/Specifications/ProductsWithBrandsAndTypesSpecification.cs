@@ -5,7 +5,12 @@ namespace EComm_Store_Core.Specifications
 {
     public class ProductsWithBrandsAndTypesSpecification : BaseSpecification<Product>
     {
-        public ProductsWithBrandsAndTypesSpecification(string sort)
+        public ProductsWithBrandsAndTypesSpecification(string sort, int? brandID, int? typeID) : base(
+            p => (
+                (!brandID.HasValue || p.ProductBrandID == brandID) &&
+                (!typeID.HasValue || p.ProductTypeID == typeID)
+            )
+        )
         {
             AddInclude(x => x.ProductBrand);
             AddInclude(x => x.ProductType);

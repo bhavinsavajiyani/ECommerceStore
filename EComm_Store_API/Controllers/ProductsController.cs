@@ -28,9 +28,9 @@ namespace EComm_Store_API.Controllers
         }
 
         [HttpGet] // URL: api/products
-        public async Task<ActionResult<IReadOnlyList<ProductDTO>>> GetProducts(string sort)
+        public async Task<ActionResult<IReadOnlyList<ProductDTO>>> GetProducts(string sort, int? brandID, int? typeID)
         {
-            var spec = new ProductsWithBrandsAndTypesSpecification(sort);
+            var spec = new ProductsWithBrandsAndTypesSpecification(sort, brandID, typeID);
             var products = await _productsRepo.GetCollectionAsync(spec);
             return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDTO>>(products));
         }
