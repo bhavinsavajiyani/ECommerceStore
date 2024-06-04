@@ -7,6 +7,7 @@ namespace EComm_Store_Core.Specifications
     {
         public ProductsWithBrandsAndTypesSpecification(ProductSpecificationParams productParams) : base(
             p => (
+                (string.IsNullOrEmpty(productParams.Search) || p.Name.ToLower().Contains(productParams.Search)) &&
                 (!productParams.BrandID.HasValue || p.ProductBrandID == productParams.BrandID) &&
                 (!productParams.TypeID.HasValue || p.ProductTypeID == productParams.TypeID)
             )
