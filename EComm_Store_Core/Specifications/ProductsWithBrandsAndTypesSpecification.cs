@@ -5,20 +5,21 @@ namespace EComm_Store_Core.Specifications
 {
     public class ProductsWithBrandsAndTypesSpecification : BaseSpecification<Product>
     {
-        public ProductsWithBrandsAndTypesSpecification(string sort, int? brandID, int? typeID) : base(
+        public ProductsWithBrandsAndTypesSpecification(ProductSpecificationParams productParams) : base(
             p => (
-                (!brandID.HasValue || p.ProductBrandID == brandID) &&
-                (!typeID.HasValue || p.ProductTypeID == typeID)
+                (!productParams.BrandID.HasValue || p.ProductBrandID == productParams.BrandID) &&
+                (!productParams.TypeID.HasValue || p.ProductTypeID == productParams.TypeID)
             )
         )
         {
             AddInclude(x => x.ProductBrand);
             AddInclude(x => x.ProductType);
             AddOrderBy(x => x.Name);
+            ApplyPaging(productParams.PageSize * (productParams.PageIndex - 1), productParams.PageSize);
 
-            if(!string.IsNullOrEmpty(sort))
+            if(!string.IsNullOrEmpty(productParams.Sort))
             {
-                switch (sort)
+                switch (productParams.Sort)
                 {
                     case "priceAsc":
                         AddOrderBy(p => p.Price);

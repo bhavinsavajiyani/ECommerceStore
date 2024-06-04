@@ -18,6 +18,12 @@ namespace EComm_Store_Core.Specifications
 
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
+        public int TakeRecords { get; private set; }
+
+        public int SkipRecords { get; private set; }
+
+        public bool IsPagingEnabled { get; private set; }
+
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
@@ -31,6 +37,13 @@ namespace EComm_Store_Core.Specifications
         protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
         {
             OrderByDescending = orderByDescendingExpression;
+        }
+
+        protected void ApplyPaging(int skip, int take)
+        {
+            SkipRecords = skip;
+            TakeRecords = take;
+            IsPagingEnabled = true;
         }
     }
 }

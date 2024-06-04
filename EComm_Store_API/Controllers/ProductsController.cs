@@ -1,6 +1,7 @@
 using AutoMapper;
 using EComm_Store_API.DTOs;
 using EComm_Store_API.Errors;
+using EComm_Store_API.Utilities;
 using EComm_Store_Core.Entities;
 using EComm_Store_Core.Interfaces;
 using EComm_Store_Core.Specifications;
@@ -28,11 +29,14 @@ namespace EComm_Store_API.Controllers
         }
 
         [HttpGet] // URL: api/products
-        public async Task<ActionResult<IReadOnlyList<ProductDTO>>> GetProducts(string sort, int? brandID, int? typeID)
+        public async Task<ActionResult<Pagination<ProductDTO>>> GetProducts([FromQuery] ProductSpecificationParams productParams)
         {
-            var spec = new ProductsWithBrandsAndTypesSpecification(sort, brandID, typeID);
+            var spec = new ProductsWithBrandsAndTypesSpecification(productParams);
+            var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+            var totalItems = await _productsRepo.CountAsync(countSpec);
             var products = await _productsRepo.GetCollectionAsync(spec);
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDTO>>(products));
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDTO>>(products);
+            return Ok(new Pagination<ProductDTO>(productParams.PageIndex, productParams.PageSize, totalItems, data));
         }
 
         [HttpGet("{id:int}")]  // URL: api/products/id => E.g.: api/products/1

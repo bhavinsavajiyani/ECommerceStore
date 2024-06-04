@@ -12,5 +12,9 @@ namespace EComm_Store_Core.Specifications
         // Sort objects
         Expression<Func<T, object>> OrderBy { get; }
         Expression<Func<T, object>> OrderByDescending { get; }
+
+        int TakeRecords { get; }
+        int SkipRecords { get; }
+        bool IsPagingEnabled { get; }
     }
 }

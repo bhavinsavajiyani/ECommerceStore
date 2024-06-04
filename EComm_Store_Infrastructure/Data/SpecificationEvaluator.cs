@@ -25,6 +25,11 @@ namespace EComm_Store_Infrastructure.Data
                 query = query.OrderByDescending(spec.OrderByDescending);
             }
 
+            if(spec.IsPagingEnabled)
+            {
+                query = query.Skip(spec.SkipRecords).Take(spec.TakeRecords);
+            }
+
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
             return query;
