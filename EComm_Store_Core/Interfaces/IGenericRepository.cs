@@ -9,5 +9,6 @@ namespace EComm_Store_Core.Interfaces
         Task<IReadOnlyList<T>> GetCollectionAsync();
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> GetCollectionAsync(ISpecification<T> spec);
+        Task<int> CountAsync(ISpecification<T> spec);
     }
 }
