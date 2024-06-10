@@ -3,6 +3,7 @@ import { Product } from '../shared/models/product';
 import { ShopService } from './shop.service';
 import { ProductBrand } from '../shared/models/productbrand';
 import { ProductType } from '../shared/models/producttype';
+import { ShopParams } from '../shared/models/shopparams';
 
 @Component({
   selector: 'app-shop',
@@ -13,8 +14,13 @@ export class ShopComponent implements OnInit {
   products: Product[] = [];
   productBrands: ProductBrand[] = [];
   productTypes: ProductType[] = [];
-  brandIDSelected = 0;
-  typeIDSelected = 0;
+  shopParams: ShopParams = new ShopParams();
+  sortOptions = [
+    {name: 'Alphabetical', value: 'name'},
+    {name: 'Price: Low - High', value: 'priceAsc'},
+    {name: 'Price: High - Low', value: 'priceDesc'}
+  ];
+  totalProductCount = 0;
 
   constructor(private shopService: ShopService) {}
 
@@ -25,8 +31,13 @@ export class ShopComponent implements OnInit {
   }
 
   getProducts() {
-    this.shopService.getProducts(this.brandIDSelected, this.typeIDSelected).subscribe({
-      next: response => this.products = response.data,
+    this.shopService.getProducts(this.shopParams).subscribe({
+      next: response => {
+        this.products = response.data,
+        this.shopParams.pageNumber = response.pageIndex,
+        this.shopParams.pageSize = response.pageSize,
+        this.totalProductCount = response.productCount
+      },
       error: error => console.log(error)
     })
   }
@@ -56,13 +67,25 @@ export class ShopComponent implements OnInit {
   }
 
   onBrandSelected(brandID: number) {
-    this.brandIDSelected = brandID;
+    this.shopParams.brandID = brandID;
     this.getProducts();
   }
 
   onTypeSelected(typeID: number) {
-    this.typeIDSelected = typeID;
+    this.shopParams.typeID = typeID;
     this.getProducts();
+  }
+
+  onSortSelected(event: any) {
+    this.shopParams.sort = event.target.value;
+    this.getProducts();
+  }
+
+  onPageChanged(event: any) {
+    if(this.shopParams.pageNumber != event) {
+      this.shopParams.pageNumber = event;
+      this.getProducts();
+    }
   }
 
 }

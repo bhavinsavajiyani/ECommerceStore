@@ -2,43 +2,36 @@
   <div class="row">
     <section class="col-3">
       <h5 class="text-warning ms-3">Sort</h5>
-      <select class="form-select mb-4">
-        <option selected>Alphabetical</option>
-        <option>Price: Low - High</option>
-        <option>Price: High - Low</option>
+      <select class="form-select mb-4" (change)="onSortSelected($event)">
+        <option *ngFor="let sort of sortOptions" [value]="sort.value">
+          {{sort.name}}
+        </option>
       </select>
       <h5 class="text-warning ms-3">Brands</h5>
       <ul class="list-group my-3">
-        <li
-          class="list-group-item"
-          *ngFor="let productBrand of productBrands"
-          [class.active]="productBrand.id === brandIDSelected"
-          [value]="productBrand.id"
-          (click)="onBrandSelected(productBrand.id)"
-        >
+        <li class="list-group-item" *ngFor="let productBrand of productBrands"
+          [class.active]="productBrand.id === shopParams.brandID" [value]="productBrand.id"
+          (click)="onBrandSelected(productBrand.id)">
           {{ productBrand.name }}
         </li>
       </ul>
       <h5 class="text-warning ms-3">Types</h5>
       <ul class="list-group my-3">
-        <li
-          class="list-group-item"
-          *ngFor="let productType of productTypes"
-          [class.active]="productType.id === typeIDSelected"
-          [value]="productType.id"
-          (click)="onTypeSelected(productType.id)"
-        >
+        <li class="list-group-item" *ngFor="let productType of productTypes"
+          [class.active]="productType.id === shopParams.typeID" [value]="productType.id"
+          (click)="onTypeSelected(productType.id)">
           {{ productType.name }}
         </li>
       </ul>
     </section>
     <section class="col-9">
       <div class="d-flex justify-content-between align-items-center pb-2">
-        <header>
-          <span>
-            Showing <strong>X</strong> of <strong>Y</strong> Results
-          </span>
-        </header>
+        <app-paging-header
+          [totalProductCount]="totalProductCount"
+          [pageNumber]="shopParams.pageNumber"
+          [pageSize]="shopParams.pageSize"
+        >
+        </app-paging-header>
         <div class="d-flex mt-2">
           <input type="text" placeholder="Search" class="form-control me-2" />
           <button class="btn btn-outline-primary mx-2">Search</button>
@@ -46,10 +39,18 @@
         </div>
       </div>
 
-      <div class="row row-cols-3 g-3">
+      <div class="row row-cols-3 g-3 mb-4 mt-1">
         <div class="col" *ngFor="let product of products">
           <app-product-item [product]="product"></app-product-item>
         </div>
+      </div>
+
+      <div class="d-flex justify-content-center" *ngIf="totalProductCount > 0">
+        <app-pager
+          [totalProductCount]="totalProductCount"
+          [pageSize]="shopParams.pageSize"
+          (pageChanged)="onPageChanged($event)">
+        </app-pager>
       </div>
     </section>
   </div>
