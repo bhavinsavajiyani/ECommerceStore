@@ -34,8 +34,10 @@ namespace EComm_Store_API.Middleware
                         ex.StackTrace.ToString()) :
                         new APIException((int)HttpStatusCode.InternalServerError);
 
-                var jsonOptions = new JsonSerializerOptions();
-                jsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
 
                 var json = JsonSerializer.Serialize(response, jsonOptions);
 
