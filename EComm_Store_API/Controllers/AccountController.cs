@@ -1,6 +1,7 @@
 using EComm_Store_API.DTOs;
 using EComm_Store_API.Errors;
 using EComm_Store_Core.Entities.Identity;
+using EComm_Store_Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +11,16 @@ namespace EComm_Store_API.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        private readonly ITokenService _tokenService;
+
+        public AccountController(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
@@ -28,7 +35,7 @@ namespace EComm_Store_API.Controllers
             return new UserDTO
             {
                 Email = user.Email,
-                Token = "This will be a Token",
+                Token = _tokenService.GenerateToken(user),
                 DisplayName = user.DisplayName,
             };
         }
@@ -49,7 +56,7 @@ namespace EComm_Store_API.Controllers
             return new UserDTO
             {
                 DisplayName = user.DisplayName,
-                Token = "This is a Token",
+                Token = _tokenService.GenerateToken(user),
                 Email = user.Email
             };
         }

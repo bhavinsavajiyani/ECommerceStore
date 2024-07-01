@@ -1,6 +1,7 @@
 using EComm_Store_API.Errors;
 using EComm_Store_Core.Interfaces;
 using EComm_Store_Infrastructure.Data;
+using EComm_Store_Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -22,6 +23,7 @@ namespace EComm_Store_API.Extensions
             });
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.Configure<ApiBehaviorOptions>(options =>
