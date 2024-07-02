@@ -8,12 +8,10 @@ using StackExchange.Redis;
 
 namespace EComm_Store_API.Extensions
 {
-    public static class ApplicationServicesExtension
+    public static class ApplicationServiceExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
             services.AddDbContext<StoreContext>(opt => {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
