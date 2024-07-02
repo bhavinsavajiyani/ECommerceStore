@@ -1,3 +1,5 @@
+using AutoMapper;
+using EComm_Store_API.DTOs;
 using EComm_Store_Core.Entities.Basket;
 using EComm_Store_Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +9,10 @@ namespace EComm_Store_API.Controllers
     public class BasketController : BaseAPIController
     {
         private readonly IBasketRepository _basketRepository;
-        public BasketController(IBasketRepository basketRepository)
+        private readonly IMapper _mapper;
+        public BasketController(IBasketRepository basketRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _basketRepository = basketRepository;
         }
 
@@ -21,9 +25,10 @@ namespace EComm_Store_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket basket)
+        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDTO basket)
         {
-            var updatedBasket = await _basketRepository.UpdateBasketAsync(basket);
+            var customerBasket = _mapper.Map<CustomerBasketDTO, CustomerBasket>(basket);
+            var updatedBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
 
             return Ok(updatedBasket);
         }

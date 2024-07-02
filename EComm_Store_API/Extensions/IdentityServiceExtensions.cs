@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace EComm_Store_API.Extensions
 {
-    public static class IdentityServicesExtension
+    public static class IdentityServiceExtensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {

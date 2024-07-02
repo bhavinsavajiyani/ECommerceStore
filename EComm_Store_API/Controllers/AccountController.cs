@@ -94,6 +94,15 @@ namespace EComm_Store_API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDto)
         {
+            if(CheckEmailExistsAsync(registerDto.Email).Result.Value)
+            {
+                return new BadRequestObjectResult(new APIValidationErrorResponse{
+                    Errors = new [] {
+                        "Email address already exists."
+                    }
+                });
+            }
+
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
