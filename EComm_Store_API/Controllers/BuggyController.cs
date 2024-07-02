@@ -1,5 +1,6 @@
 using EComm_Store_API.Errors;
 using EComm_Store_Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EComm_Store_API.Controllers
@@ -10,6 +11,13 @@ namespace EComm_Store_API.Controllers
         public BuggyController(StoreContext storeContext)
         {
             _storeContext = storeContext;
+        }
+
+        [HttpGet("testauth")]
+        [Authorize]
+        public ActionResult<string> GetSecretText()
+        {
+            return "Authorized Personnel Only!";
         }
 
         [HttpGet("notfound")]
