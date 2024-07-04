@@ -11,8 +11,8 @@ export interface Basket {
     price: number
     quantity: number
     pictureURL: string
-    brand: any
-    type: any
+    productBrand: any
+    productType: any
   }
 
   export class Basket implements Basket {
